@@ -1,23 +1,26 @@
-import logo from './logo.svg';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import './App.css';
+import { fetchText, changeText } from './store/searchFilms';
 
 function App() {
+  const dispatch = useDispatch()
+  const {s, text} = useSelector((state) => state.search)
+
+  useEffect(() => {
+    if(text.length === 3) {
+      dispatch(fetchText(text))
+    }
+    
+  }, [text])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <input type={text} onChange={e => dispatch(changeText(e.target.value))}/>
+      {
+        s?.map((e) => {
+          return <p>{e.title}</p>
+        })
+      }
     </div>
   );
 }
